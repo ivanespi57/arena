@@ -64,6 +64,7 @@ class Evento extends Model
             ->get();
     }
 
+
     public function precioParaSector(int $sectorId): ?Precio
     {
         return $this->precios()

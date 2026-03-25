@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
-use App\Models\EstadoAsiento;
 use App\Models\Asiento;
+use App\Models\EstadoAsiento;
 use App\Models\Evento;
 use Illuminate\Support\Facades\DB;
 
 class ReservaService
 {
     /**
-     * Reservar un asiento para un evento
+     * Reservar un asiento para un evento (15 minutos)
      */
     public function reservarAsiento($eventoId, $asientoId, $userId)
     {
@@ -50,7 +50,7 @@ class ReservaService
     }
 
     /**
-     * Cancelar una reserva
+     * Cancelar una reserva del usuario
      */
     public function cancelarReserva($reservaId, $userId)
     {
@@ -65,7 +65,7 @@ class ReservaService
     }
 
     /**
-     * Obtener reservas activas de un usuario
+     * Obtener reservas activas (no expiradas) de un usuario
      */
     public function obtenerReservasActivas($userId)
     {
@@ -77,11 +77,13 @@ class ReservaService
     }
 
     /**
-     * Verificar que el sector esté disponible para el evento
+     * Verifica que el sector tenga precio definido para el evento
      */
     private function verificarSectorDisponible($evento, $sectorId)
     {
-        if (!$evento->sectorEstaDisponible($sectorId)) {
+        $precio = $evento->precioDelSector($sectorId);
+
+        if (!$precio || !$precio->disponible) {
             throw new \Exception('El sector no está disponible para este evento');
         }
     }

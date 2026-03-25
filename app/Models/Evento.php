@@ -65,7 +65,7 @@ class Evento extends Model
     }
 
 
-    public function precioParaSector(int $sectorId): ?Precio
+    public function precioDelSector(int $sectorId): ?Precio
     {
         return $this->precios()
             ->where('sector_id', $sectorId)

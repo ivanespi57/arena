@@ -64,6 +64,14 @@ class Evento extends Model
             ->get();
     }
 
+    public function sectorEstaDisponible(int $sectorId): bool
+    {
+        return $this->sectores()
+            ->where('sectores.id', $sectorId)
+            ->where('sectores.activo', true)
+            ->wherePivot('disponible', true)
+            ->exists();
+    }
 
     public function precioDelSector(int $sectorId): ?Precio
     {
@@ -80,6 +88,16 @@ class Evento extends Model
     public function tieneEntradasVendidas(): bool
     {
         return $this->entradas()->exists();
+    }
+
+    public function totalAsientosDisponibles(): int
+    {
+        return $this->sectoresDisponibles()->sum('capacidad');
+    }
+
+    public function totalEntradasVendidas(): int
+    {
+        return $this->entradas()->count();
     }
 
     // ============================================
